@@ -35,6 +35,11 @@ export class TecnicoReadComponent implements AfterViewInit {
     })
   }
 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   navigateToCreate(): void {
     this.router.navigate(['tecnicos/create'])
   }

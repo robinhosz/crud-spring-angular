@@ -4,6 +4,13 @@
     <button (click)="navigateToCreate()" class="mat-elevation-z8 container" mat-stroked-button color="accent">CRIAR NOVO TÉCNICO</button>
 </div>
 
+<mat-form-field appearance="standard">
+  <mat-label>Pesquisar</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Robson" #input>
+</mat-form-field>
+
+<mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="search"></mat-icon>
+
 <div class="mat-elevation-z8 container">
     <table mat-table [dataSource]="dataSource">
   
