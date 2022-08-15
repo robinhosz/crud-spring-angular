@@ -1,15 +1,47 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
+import { Cliente } from 'src/app/models/cliente';
+import { ClienteServiceService } from 'src/app/services/cliente.service';
 
 @Component({
   selector: 'app-cliente-read',
   templateUrl: './cliente-read.component.html',
   styleUrls: ['./cliente-read.component.css']
 })
-export class ClienteReadComponent implements OnInit {
+export class ClienteReadComponent implements AfterViewInit {
 
-  constructor() { }
+  clientes: Cliente[] = [];
 
-  ngOnInit(): void {
+  displayedColumns: string[] = ['id', 'nome', 'cpf', 'telefone', 'action'];
+  dataSource = new MatTableDataSource<Cliente>(this.clientes);
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  constructor(
+    private service : ClienteServiceService,
+    private router: Router) {}
+
+  ngAfterViewInit() {
+    this.findAll();
   }
 
+  findAll(): void {
+    this.service.findAll().subscribe((resposta) => {
+      this.clientes = resposta;
+      this.dataSource = new MatTableDataSource<Cliente>(this.clientes);
+      this.dataSource.paginator = this.paginator;
+    })
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  navigateToCreate(): void {
+    this.router.navigate(['tecnicos/create'])
+  }
 }
+
